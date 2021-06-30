@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles(theme => ({
   media: {
@@ -11,5 +11,12 @@ export const useStyles = makeStyles(theme => ({
   prizeStyles: {
     color: "black",
     fontWeight: "bold",
+  },
+  toRow: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  topSpacing: {
+    marginTop: theme.spacing(1),
   },
 }));
