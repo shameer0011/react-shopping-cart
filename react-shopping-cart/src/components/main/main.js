@@ -1,14 +1,11 @@
-import React from "react";
-import { useStyles } from "./mainStyle";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+import React, { useState } from "react";
+import data from "../../data.json";
+import Products from "../products/product";
 import SelectComponent from "../select/select";
+import { useStyles } from "./mainStyle";
+import { Paper } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 const Main = ({
   title,
   sidebar,
@@ -26,94 +23,62 @@ const Main = ({
   //display size
   rowTypes,
   formHelperTextRowTypes,
-  csv
+  csv,
 }) => {
   const classes = useStyles();
+
+  const [product, setProduct] = useState(data.products);
+  const [size, setSize] = useState("");
+  const [sort, setSort] = useState("");
+
   return (
-    <Grid container className={classes.content}>
-      <Grid item xs={9}>
-        <div className={classes.toRow}>
-          <div>{title}</div>
-          <div>
-            <SelectComponent values={values} sizes={formHelperText} />
-          </div>
-          <div>
-            <SelectComponent values={prize} sizes={formHelperTextPrize} />
-          </div>
-          <div>
-            <SelectComponent values={mediaTypes} sizes={formHelperTextMedia} />
-          </div>
-          <div>
-            <SelectComponent values={rowTypes} sizes={formHelperTextRowTypes} />
-          </div>
-          <div>
-          <Button className={classes.topSpacing} variant="contained" color="primary">
-         {csv}
-         </Button>
-          </div>
-        </div>
-        <Grid container className={classes.rowItem}>
-          {data.products.map((item, index) => {
-            return (
-              <>
-                <Grid
-                  item
-                  xs={4}
-                  key={index}
-                  spacing={2}
-                  style={{ padding: 7 }}
+    <div>
+      <Grid container>
+        <Grid item xs={8}>
+          <Paper>
+            <div className={classes.toRow}>
+              <div>{title}</div>
+              {/* <div> */}
+              {/* <Carousal title={titleShow} body={body}></Carousal>; */}
+              {/* </div> */}
+              <div>
+                <SelectComponent values={values} sizes={formHelperText} />
+              </div>
+              <div>
+                <selectComponent values={prize} sizes={formHelperTextPrize} />
+              </div>
+              <div>
+                <SelectComponent
+                  values={mediaTypes}
+                  sizes={formHelperTextMedia}
+                />
+              </div>
+              <div>
+                <SelectComponent
+                  values={rowTypes}
+                  sizes={formHelperTextRowTypes}
+                />
+              </div>
+              <div>
+                <Button
+                  className={classes.topSpacing}
+                  variant="contained"
+                  color="primary"
                 >
-                  <Paper elevation={3}>
-                    <Card className={classes.root}>
-                      <CardActionArea>
-                        <CardMedia
-                          className={classes.media}
-                          image={item.image}
-                          title="Contemplative Reptile"
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="h2">
-                            {item.title}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            component="p"
-                          >
-                            {item.description}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            component="p"
-                          >
-                            {item.availableSizes.join(" ,")}
-                          </Typography>
-                        </CardContent>
-                        <div className={classes.buttonStyle}>
-                          <Button
-                            variant="contained"
-                            className={classes.prizeStyles}
-                          >
-                            {`${item.price} $`}
-                          </Button>
-                          <Button variant="contained" color="primary">
-                            {cartLabel}
-                          </Button>
-                        </div>
-                      </CardActionArea>
-                    </Card>
-                  </Paper>
-                </Grid>
-              </>
-            );
-          })}
+                  {csv}
+                </Button>
+              </div>
+            </div>
+            <Grid item>
+              <Products product={product} cartLabel={cartLabel} />
+            </Grid>
+          </Paper>
+        </Grid>
+        <Grid item xs={4}>
+          <Paper className={classes.paper}>ADD TO CART</Paper>
         </Grid>
       </Grid>
-      <Grid item xs={3}>
-        {sidebar}
-      </Grid>
-    </Grid>
+    </div>
   );
 };
 export default Main;

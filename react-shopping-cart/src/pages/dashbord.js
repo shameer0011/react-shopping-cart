@@ -1,5 +1,4 @@
 import React from "react";
-import FooterPage from "./footerPage";
 import HeaderPage from "./headerPage";
 import MainPage from "./mainPage";
 
@@ -8,7 +7,7 @@ const Dashbord = () => {
     <div>
       <HeaderPage />
       <MainPage />
-      <FooterPage />
+      {/* <FooterPage /> */}
     </div>
   );
 };
