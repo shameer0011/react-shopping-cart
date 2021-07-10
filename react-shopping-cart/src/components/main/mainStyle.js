@@ -4,6 +4,9 @@ export const useStyles = makeStyles(theme => ({
   media: {
     height: 340,
   },
+  root: {
+    flexGrow: 1,
+  },
   buttonStyle: {
     display: "flex",
     justifyContent: "space-between",
@@ -15,8 +18,6 @@ export const useStyles = makeStyles(theme => ({
   toRow: {
     display: "flex",
     justifyContent: "space-between",
-  },
-  topSpacing: {
-    marginTop: theme.spacing(1),
+    alignContent: "center",
   },
 }));
