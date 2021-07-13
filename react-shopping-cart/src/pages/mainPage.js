@@ -2,7 +2,7 @@ import React from "react";
 import Main from "../components/main/main";
 import data from "../data.json";
 const MainPage = () => {
-  const VALID_SIZE = ["Medim", "Large", "Extra Large", "Small"];
+  const VALID_SIZE = ["XL", "XXL", "X", "L"];
   const VALID_PRIZE = ["LOW", "MEDIUM", "HIGH"];
   const MEDIA_TYPES = ["PRODUCTS", "FOOTER"];
   const ROW_TYPES = ["1", "2", "3"];

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import data from "../../data.json";
 import Products from "../products/product";
-import SelectComponent from "../select/select";
+import Selects from "../ui/select/select";
 import { useStyles } from "./mainStyle";
 import { Paper } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -26,10 +26,53 @@ const Main = ({
   csv,
 }) => {
   const classes = useStyles();
-
+  // const { changeValues } = props;
   const [product, setProduct] = useState(data.products);
+  console.log(product, "product");
   const [size, setSize] = useState("");
-  const [sort, setSort] = useState("");
+  const [price, setPrice] = useState("");
+  console.log(price);
+
+  const reciveData = (val, e) => {
+    if (e == "None") {
+      setProduct(data.products);
+    }
+    if (e) {
+      var newArray = data.products.slice().filter(el => {
+        return el.availableSizes.indexOf(e) >= 0;
+      });
+      setProduct(newArray);
+    }
+  };
+
+  const clickItem = values => {
+    // logic for click items
+    // console.log(values, "valuess");
+  };
+  const priceData = (state, e, values) => {
+    setPrice(e);
+    if (price == "HIGH") {
+      const prize = product.sort(
+        (a, b) => (a.price > b.price ? 1 : b.price > a.price ? -1 : 0)
+      );
+      setProduct(prize);
+    } else if (price == "MEDIUM") {
+      console.log("Medium");
+    } else {
+      const prize = product.sort(
+        (a, b) => (a.price < b.price ? 1 : b.price < a.price ? -1 : 0)
+      );
+      setProduct(prize);
+    }
+  };
+
+  const mediaData = (state, e, values) => {
+    console.log("media", state, e, values);
+  };
+
+  const rowTypesData = (state, e, values) => {
+    console.log("rowTypes", state, e, values);
+  };
 
   return (
     <div>
@@ -42,21 +85,31 @@ const Main = ({
               {/* <Carousal title={titleShow} body={body}></Carousal>; */}
               {/* </div> */}
               <div>
-                <SelectComponent values={values} sizes={formHelperText} />
-              </div>
-              <div>
-                <selectComponent values={prize} sizes={formHelperTextPrize} />
-              </div>
-              <div>
-                <SelectComponent
-                  values={mediaTypes}
-                  sizes={formHelperTextMedia}
+                <Selects
+                  change={reciveData}
+                  sizes={values}
+                  clickOneItem={clickItem}
                 />
               </div>
               <div>
-                <SelectComponent
-                  values={rowTypes}
-                  sizes={formHelperTextRowTypes}
+                <Selects
+                  change={priceData}
+                  sizes={prize}
+                  clickOneItem={clickItem}
+                />
+              </div>
+              <div>
+                <Selects
+                  change={mediaData}
+                  sizes={mediaTypes}
+                  clickOneItem={clickItem}
+                />
+              </div>
+              <div>
+                <Selects
+                  change={rowTypesData}
+                  sizes={rowTypes}
+                  clickOneItem={clickItem}
                 />
               </div>
               <div>
