@@ -30,7 +30,23 @@ const Main = ({
 
   const [product, setProduct] = useState(data.products);
   const [price, setPrice] = useState("");
-  const [addToCart, setAddToCart] = useState([]);
+  // Two way to set get item..
+  // First way
+  const [addToCart, setAddToCart] = useState(
+    JSON.parse(localStorage.getItem("cartItems"))
+      ? JSON.parse(localStorage.getItem("cartItems"))
+      : []
+  );
+  // second way
+  // const [addToCart, setAddToCart] = useState([]);
+
+  // useEffect(() => {
+  //   const localRepoItems = localStorage.getItem("cartItems");
+  //   if (localRepoItems) {
+  //     setAddToCart(JSON.parse(localRepoItems));
+  //   }
+  // }, []);
+
   console.log("state", addToCart);
 
   const reciveData = (val, e) => {
@@ -51,6 +67,7 @@ const Main = ({
   const priceData = (state, e, values) => {
     setPrice(e);
     if (price == "HIGH") {
+      // comimg from slow..so create prize state
       const prize = product.sort(
         (a, b) => (a.price > b.price ? 1 : b.price > a.price ? -1 : 0)
       );
@@ -87,14 +104,25 @@ const Main = ({
       cartItems.push({ ...productItems, count: 1 });
     }
     setAddToCart(cartItems);
+    // localStorage.setItem(JSON.stringify("cartItems"), addToCart);
+    // localStorage.setItem("cartItems", JSON.stringify(addToCart)); // comimg from slow..
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
 
   const removeButton = item => {
     const cartItemRemove = addToCart.slice();
     const cartItems = cartItemRemove.filter(product => product.id !== item.id);
     setAddToCart(cartItems);
+    // localStorage.setItem("cartItems", JSON.stringify(addToCart));
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify(cartItemRemove.filter(product => product.id !== item.id))
+    );
   };
-  const proceedTotalAmount = () => {};
+  const checkoutFormToMain = formItems => {
+    console.log(formItems, "in main");
+  };
+
   return (
     <div>
       <Grid container>
@@ -157,7 +185,7 @@ const Main = ({
             <Cart
               cartElements={addToCart}
               removeButton={removeButton}
-              proceedTotalAmount={proceedTotalAmount}
+              checkoutFormToMain={checkoutFormToMain}
             />
           </Paper>
         </Grid>
