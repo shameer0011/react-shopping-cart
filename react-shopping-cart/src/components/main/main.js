@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import data from "../../data.json";
-import Cart from "../card/cart";
+import Cart from "../cart/cart";
 import Products from "../products/product";
 import Selects from "../ui/select/select";
 import { useStyles } from "./mainStyle";
@@ -90,7 +90,6 @@ const Main = ({
   };
 
   const removeButton = item => {
-    console.log(item, "item");
     const cartItemRemove = addToCart.slice();
     const cartItems = cartItemRemove.filter(product => product.id !== item.id);
     setAddToCart(cartItems);
