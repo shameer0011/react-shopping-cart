@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import data from "../../data.json";
+import Cart from "../card/cart";
 import Products from "../products/product";
 import Selects from "../ui/select/select";
 import { useStyles } from "./mainStyle";
@@ -26,12 +27,11 @@ const Main = ({
   csv,
 }) => {
   const classes = useStyles();
-  // const { changeValues } = props;
+
   const [product, setProduct] = useState(data.products);
-  console.log(product, "product");
-  const [size, setSize] = useState("");
   const [price, setPrice] = useState("");
-  console.log(price);
+  const [addToCart, setAddToCart] = useState([]);
+  console.log("state", addToCart);
 
   const reciveData = (val, e) => {
     if (e == "None") {
@@ -47,7 +47,6 @@ const Main = ({
 
   const clickItem = values => {
     // logic for click items
-    // console.log(values, "valuess");
   };
   const priceData = (state, e, values) => {
     setPrice(e);
@@ -74,6 +73,29 @@ const Main = ({
     console.log("rowTypes", state, e, values);
   };
 
+  const addTocardForStateFn = productItems => {
+    const cartItems = addToCart.slice();
+    let alreadyCartItems = false;
+
+    cartItems.forEach(item => {
+      if (item.id === productItems.id) {
+        item.count++;
+        alreadyCartItems = true;
+      }
+    });
+    if (!alreadyCartItems) {
+      cartItems.push({ ...productItems, count: 1 });
+    }
+    setAddToCart(cartItems);
+  };
+
+  const removeButton = item => {
+    console.log(item, "item");
+    const cartItemRemove = addToCart.slice();
+    const cartItems = cartItemRemove.filter(product => product.id !== item.id);
+    setAddToCart(cartItems);
+  };
+  const proceedTotalAmount = () => {};
   return (
     <div>
       <Grid container>
@@ -123,12 +145,22 @@ const Main = ({
               </div>
             </div>
             <Grid item>
-              <Products product={product} cartLabel={cartLabel} />
+              <Products
+                product={product}
+                cartLabel={cartLabel}
+                addTocardForStateFn={addTocardForStateFn}
+              />
             </Grid>
           </Paper>
         </Grid>
         <Grid item xs={4}>
-          <Paper className={classes.paper}>ADD TO CART</Paper>
+          <Paper className={classes.paper}>
+            <Cart
+              cartElements={addToCart}
+              removeButton={removeButton}
+              proceedTotalAmount={proceedTotalAmount}
+            />
+          </Paper>
         </Grid>
       </Grid>
     </div>

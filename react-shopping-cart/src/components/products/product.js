@@ -3,11 +3,18 @@ import Cards from "../card/card";
 import { useStyles } from "./productStyle";
 import { Grid } from "@material-ui/core";
 
-const Products = ({ product, cartLabel }) => {
+const Products = ({ product, cartLabel ,addTocardForStateFn}) => {
+
   const handleClick = (item, index) => {
     console.log(item, index);
   };
   const classes = useStyles();
+
+  const addToCard =(item)=>{
+    console.log("add to cart buitton in product",item)
+    addTocardForStateFn(item)
+
+  }
   return (
     <>
       <Grid container>
@@ -18,6 +25,7 @@ const Products = ({ product, cartLabel }) => {
               index={index}
               cartLabel={cartLabel}
               onClick={handleClick}
+              addToCardButton ={addToCard}
             />
           </Grid>
         ))}

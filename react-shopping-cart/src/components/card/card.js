@@ -7,8 +7,9 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 const Cards = props => {
-  const { item, index, cartLabel, onClick } = props;
+  const { item, index, cartLabel, onClick,addToCardButton } = props;
   const classes = useStyles();
+
   const cardClick = () => {
     onClick(item, index);
   };
@@ -36,7 +37,9 @@ const Cards = props => {
             <Button variant="contained" className={classes.prizeStyles}>
               {`${item.price} $`}
             </Button>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary"
+            onClick ={()=>addToCardButton(item)}
+            >
               {cartLabel}
             </Button>
           </div>
