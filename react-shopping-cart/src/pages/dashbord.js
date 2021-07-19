@@ -7,6 +7,7 @@ const Dashbord = () => {
     <div>
       <HeaderPage />
       <MainPage />
+
       {/* <FooterPage /> */}
     </div>
   );

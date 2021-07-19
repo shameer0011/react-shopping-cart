@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -20,7 +21,8 @@ function getModalStyle() {
 const useStyles = makeStyles(theme => ({
   paper: {
     position: "absolute",
-    width: 400,
+    width: "70%",
+    height: "70%",
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
@@ -28,7 +30,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const SimpleModal = () => {
+const SimpleModal = ({ media, modalBody, modalAddToCart }) => {
+
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
@@ -41,24 +44,60 @@ const SimpleModal = () => {
     setOpen(false);
   };
 
-  const body = (
-    <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Text in a modal</h2>
-    </div>
-  );
-
   return (
     <div>
-      <button type="button" onClick={handleOpen}>
-        Open Modal
-      </button>
+      <div onClick={handleOpen}>{media}</div>
+
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        {body}
+        <div style={modalStyle} className={classes.paper}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              {" "}
+              <img src={modalBody.image} alt={modalBody.title} />
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "0.25rem",
+              textAlign: "center",
+              marginLeft: "0.2rem",
+            }}
+          >
+            <div id="simple-modal-title">Name : {modalBody.title}</div>
+            <div id="simple-modal-title">
+              Description : {modalBody.description}
+            </div>
+
+            <div id="simple-modal-title"> Price : $ {modalBody.price}</div>
+            <div>
+              <Button
+                onClick={() => {
+                  modalAddToCart(modalBody);
+                  handleClose();
+                }}
+                variant="contained"
+                color="primary"
+                disableElevation
+              >
+                ADD TO CART
+              </Button>
+            </div>
+          </div>
+        </div>
       </Modal>
     </div>
   );
