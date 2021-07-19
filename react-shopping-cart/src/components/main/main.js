@@ -1,35 +1,34 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import data from "../../data.json";
+import { createOrder, editOrder, removeOrder } from "../../redux";
 import Cart from "../cart/cart";
+import Order from "../Order/order";
 import Products from "../products/product";
 import Selects from "../ui/select/select";
 import { useStyles } from "./mainStyle";
-import { Paper } from "@material-ui/core";
+import product from "..\\products\\product";
+import { Paper, Grid } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-const Main = ({
-  title,
-  sidebar,
-  data,
-  cartLabel,
-  //size
-  values,
-  formHelperText,
-  //price
-  prize,
-  formHelperTextPrize,
-  //footer/product
-  mediaTypes,
-  formHelperTextMedia,
-  //display size
-  rowTypes,
-  formHelperTextRowTypes,
-  csv,
-}) => {
+// import Grid from "@material-ui/core/Grid";
+const Main = props => {
+  const {
+    title,
+    data,
+    cartLabel,
+    sidebar,
+    values,
+    prize,
+    mediaTypes,
+    rowTypes,
+    csv,
+  } = props;
   const classes = useStyles();
 
-  const [product, setProduct] = useState(data.products);
   const [price, setPrice] = useState("");
+  const [oderForm, setOrderForm] = useState("");
+  const [editCards, setEditCards] = useState("");
+
   // Two way to set get item..
   // First way
   const [addToCart, setAddToCart] = useState(
@@ -47,17 +46,15 @@ const Main = ({
   //   }
   // }, []);
 
-  console.log("state", addToCart);
-
   const reciveData = (val, e) => {
     if (e == "None") {
-      setProduct(data.products);
+      // setProduct(data.products);
     }
     if (e) {
       var newArray = data.products.slice().filter(el => {
         return el.availableSizes.indexOf(e) >= 0;
       });
-      setProduct(newArray);
+      // setProduct(newArray);
     }
   };
 
@@ -71,24 +68,20 @@ const Main = ({
       const prize = product.sort(
         (a, b) => (a.price > b.price ? 1 : b.price > a.price ? -1 : 0)
       );
-      setProduct(prize);
+      // setProduct(prize);
     } else if (price == "MEDIUM") {
       console.log("Medium");
     } else {
       const prize = product.sort(
         (a, b) => (a.price < b.price ? 1 : b.price < a.price ? -1 : 0)
       );
-      setProduct(prize);
+      // setProduct(prize);
     }
   };
 
-  const mediaData = (state, e, values) => {
-    console.log("media", state, e, values);
-  };
+  const mediaData = (state, e, values) => {};
 
-  const rowTypesData = (state, e, values) => {
-    console.log("rowTypes", state, e, values);
-  };
+  const rowTypesData = (state, e, values) => {};
 
   const addTocardForStateFn = productItems => {
     const cartItems = addToCart.slice();
@@ -119,8 +112,24 @@ const Main = ({
       JSON.stringify(cartItemRemove.filter(product => product.id !== item.id))
     );
   };
-  const checkoutFormToMain = formItems => {
-    console.log(formItems, "in main");
+  const checkoutFormToMain = formItems => {};
+
+  //For Order Cards ADD EDIT DELETE
+
+  const editSubmission = editItems => {
+    editItems.map(items => {
+      return props.dispatch(editOrder(items.id, items));
+    });
+  };
+  const orderSubmit = products => {
+    setOrderForm(products);
+    products.map(addItems => props.dispatch(createOrder(addItems)));
+  };
+  const editCard = editItems => {
+    setEditCards(editItems);
+  };
+  const removeCard = id => {
+    props.dispatch(removeOrder({ id: id.id }));
   };
 
   return (
@@ -173,9 +182,11 @@ const Main = ({
             </div>
             <Grid item>
               <Products
-                product={product}
+                product={props.productsData}
                 cartLabel={cartLabel}
                 addTocardForStateFn={addTocardForStateFn}
+                editCardToMain={editCard}
+                removeCardToMain={removeCard}
               />
             </Grid>
           </Paper>
@@ -190,7 +201,21 @@ const Main = ({
           </Paper>
         </Grid>
       </Grid>
+      <div>
+        <Order
+          orderSubmit={orderSubmit}
+          editCard={editCards}
+          editSubmission={editSubmission}
+        />
+      </div>
     </div>
   );
 };
-export default Main;
+
+const mapStateToProps = (state, props) => {
+  return {
+    productsData: state.prod,
+    filter: state.filt,
+  };
+};
+export default connect(mapStateToProps)(Main);
